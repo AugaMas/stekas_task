@@ -1,7 +1,15 @@
 import React from 'react';
+import Router from './components/Router';
+import NavigationBar from './components/NavBar';
 
 const App = () => {
-  return <div>Stekas task</div>;
+  return (
+    <>
+      <NavigationBar />
+      <div>Stekas task</div>
+      <Router />
+    </>
+  );
 };
 
 export default App;
