@@ -12,6 +12,7 @@ const userRegistrationJsonSchema = {
     lastName: { type: 'string', minLength: 2 },
     password: { type: 'string', minLength: 6 },
   },
+  require: ['email', 'name', 'lastName', 'password'],
 };
 
 const userCredentialsJsonSchema = {
@@ -20,6 +21,7 @@ const userCredentialsJsonSchema = {
     email: { type: 'string', format: 'email' },
     password: { type: 'string', minLength: 6 },
   },
+  require: ['email', 'password'],
 };
 
 async function createUser(user) {
@@ -34,7 +36,7 @@ async function createUser(user) {
 
   const savedUser = await newUser.save();
 
-  return savedUser;
+  return userDTO(savedUser);
 }
 
 async function checkUserCredentials(userCredentials) {
@@ -44,7 +46,7 @@ async function checkUserCredentials(userCredentials) {
       userCredentials.password,
       user.passwordHash
     );
-    if (isPasswordMatching) return user;
+    if (isPasswordMatching) return userDTO(user);
     else {
       throw new WrongUserCredentialsException();
     }
@@ -57,7 +59,16 @@ async function getUser(id) {
   //   if (!user) {
   //     throw new Error();
   //   }
-  return user;
+  return userDTO(user);
+}
+
+function userDTO(user) {
+  return {
+    _id: user._id,
+    name: user.name,
+    lastName: user.lastName,
+    email: user.email,
+  };
 }
 
 module.exports = {
