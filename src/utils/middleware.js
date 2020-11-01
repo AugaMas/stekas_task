@@ -8,3 +8,5 @@ function errorHandler(err, req, res, next) {
 function unknownEndpoint(req, res) {
   res.status(404).send({ error: 'unknown endpoint' });
 }
+
+module.exports = { errorHandler, unknownEndpoint };
