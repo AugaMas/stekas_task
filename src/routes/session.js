@@ -6,7 +6,7 @@ const userServices = require('../services/userServices');
 const router = express.Router();
 
 router.get('/', sessionService.authMiddleware, async (req, res, next) => {
-  res.send('test');
+  res.json(req.user);
 });
 
 router.post('/', async (req, res, next) => {

@@ -5,6 +5,7 @@ const orderSchema = new mongoose.Schema({
   name: String,
   lastName: String,
   date: Date,
+  customer: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
 const Order = new mongoose.model('Order', orderSchema);
