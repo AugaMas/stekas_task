@@ -21,9 +21,7 @@ router.post('/', async (req, res, next) => {
 
     if (user) {
       const token = sessionService.createToken(user);
-      const cookie = sessionService.createCookie(token);
-      res.setHeader('Set-Cookie', cookie);
-      res.json(user);
+      res.json({ user, token });
     }
   } catch (e) {
     next(e);
@@ -32,7 +30,6 @@ router.post('/', async (req, res, next) => {
 
 router.get('/logout', sessionService.authMiddleware, async (req, res) => {
   req.user = undefined;
-  res.setHeader('Set-Cookie', 'Authorization=; Max-age=0');
   res.sendStatus(200);
 });
 

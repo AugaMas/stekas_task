@@ -1,28 +1,37 @@
 const { jwtSecret } = require('../utils/config');
 const jwt = require('jsonwebtoken');
+const cookie = require('cookie');
 const { getUser } = require('./userServices');
 const AuthenticationTokenMissingException = require('../exceptions/AuthenticationTokenMissingException');
 const WrongAuthenticationTokenException = require('../exceptions/WrongAuthenticationTokenException');
 
 function createToken(user) {
-  const expiresIn = 60 * 60 * 24;
   const dataStoredInToken = { _id: user._id };
+  const expiresIn = 24 * 60 * 60;
+  return jwt.sign(dataStoredInToken, jwtSecret, { expiresIn });
+}
 
-  return {
-    expiresIn,
-    token: jwt.sign(dataStoredInToken, jwtSecret, { expiresIn }),
-  };
+function getTokenFrom(request) {
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7);
+  }
+  return null;
 }
 
 function createCookie(token) {
-  return `Authorization=${token.token}; HttpOnly; Max-Age=${token.expiresIn}`;
+  return cookie.serialize('Authorization', token.token, {
+    maxAge: token.expiresIn,
+    path: '/api',
+  });
 }
 
 async function authMiddleware(req, res, next) {
-  const cookies = req.cookies;
-  if (cookies && cookies.Authorization) {
+  const token = getTokenFrom(req);
+  if (token) {
     try {
-      const verificationResponse = jwt.verify(cookies.Authorization, jwtSecret);
+      const verificationResponse = jwt.verify(token, jwtSecret);
+
       const id = verificationResponse._id;
 
       const user = await getUser(id);

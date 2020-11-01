@@ -38,8 +38,7 @@ async function deleteOrder(id) {
 }
 
 async function getOrders(query, user) {
-  const paging = apiUtil.getPaging(query);
-  console.log(paging);
+  const { size, page } = apiUtil.getPaging(query);
   const orders = await Order.find({ customer: user._id })
     .lean()
     .limit(size)

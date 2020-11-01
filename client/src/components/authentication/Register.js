@@ -1,23 +1,40 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Form, Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { register } from '../../actions/authentication/action';
+import { Form, Button, Spinner, Span } from 'react-bootstrap';
 
-function Register() {
+function Register(props) {
   const [user, setUser] = useState({
     email: '',
     name: '',
     lastName: '',
     password: '',
   });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   function handleChange(e) {
+    if (error) {
+      setError('');
+    }
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(user);
+    const promise = dispatch(register(user));
+    setLoading(true);
+    promise
+      .then((res) => {
+        setLoading(false);
+        props.handleClose();
+      })
+      .catch((e) => {
+        setLoading(false);
+        setError(e);
+      });
   }
 
   return (
@@ -68,10 +85,16 @@ function Register() {
           onChange={(e) => handleChange(e)}
           placeholder="Įveskite slaptažodį"
         />
+        {error && <Form.Text style={{ color: 'red' }}>{error}</Form.Text>}
       </Form.Group>
       <Button variant="success" type="submit">
         Registruotis
       </Button>
+      {loading && (
+        <Spinner animation="border" role="status" style={{ marginLeft: '1em' }}>
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      )}
     </Form>
   );
 }

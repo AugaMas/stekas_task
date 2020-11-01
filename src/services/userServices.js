@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const WrongUserCredentialsException = require('../exceptions/WrongUserCredentialsException');
+const HttpException = require('../exceptions/HttpException');
 
 const saltRound = 10;
 
@@ -25,8 +26,11 @@ const userCredentialsJsonSchema = {
 };
 
 async function createUser(user) {
+  const isExistUser = await User.findOne({ email: user.email }).lean();
+  if (isExistUser) {
+    throw new HttpException(400, 'Vartotojas su tokiu vardu jau egzistuoja');
+  }
   const passwordHash = await bcrypt.hash(user.password, saltRound);
-
   const newUser = new User({
     email: user.email,
     name: user.name,

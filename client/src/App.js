@@ -6,7 +6,6 @@ const App = () => {
   return (
     <>
       <NavigationBar />
-      <div>Stekas task</div>
       <Router />
     </>
   );
