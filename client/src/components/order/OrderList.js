@@ -38,7 +38,22 @@ function OrderList() {
   return (
     <Container>
       <h2 style={{ textAlign: 'center' }}> Mano užsakymai</h2>
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      {loading ? (
+        <div
+          style={{ display: 'flex', height: '20vh', justifyContent: 'center' }}
+        >
+          <Spinner
+            animation="border"
+            role="status"
+            style={{ alignSelf: 'center' }}
+          >
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </div>
+      ) :
+      (
+        <>
+        {ordersCount? <> <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div style={{ marginRight: '2em', alignSelf: 'flex-end' }}>
           <Filter
             options={[
@@ -62,20 +77,7 @@ function OrderList() {
           />
         </div>
       </div>
-      {loading ? (
-        <div
-          style={{ display: 'flex', height: '20vh', justifyContent: 'center' }}
-        >
-          <Spinner
-            animation="border"
-            role="status"
-            style={{ alignSelf: 'center' }}
-          >
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-        </div>
-      ) : (
-        <>
+     
           <Table striped bordered hover responsive>
             <thead>
               <tr>
@@ -110,9 +112,14 @@ function OrderList() {
               pagesCount={Math.ceil(ordersCount / (itemsPerPage || 1))}
               selectedPage={+page}
             />
-          </div>
+          </div> </> :
+           <div style={{ textAlign: 'center', fontSize: '2em', marginTop: '5em'}}>
+           Nėra užsakymų
+         </div>
+          }
         </>
       )}
+           
     </Container>
   );
 }

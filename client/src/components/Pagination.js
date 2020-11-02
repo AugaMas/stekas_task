@@ -74,14 +74,14 @@ function Pagination({ pagesCount, selectedPage = 1 }) {
     paginationElements.push(
       <BtPagination.Next
         key={pagesCount + 2}
-        disabled={selectedPage === pagesCount}
+        disabled={selectedPage >= pagesCount}
         onClick={() => {
           redirectTo(`?${addQuery('page', selectedPage + 1)}`);
         }}
       />,
       <BtPagination.Last
         key={pagesCount + 3}
-        disabled={selectedPage === pagesCount}
+        disabled={selectedPage >= pagesCount}
         onClick={() => {
           redirectTo(`?${addQuery('page', pagesCount)}`);
         }}
