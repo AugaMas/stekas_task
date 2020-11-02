@@ -12,8 +12,8 @@ function OrderEdit() {
   const { id } = useParams();
   const auth = useSelector((store) => store.auth);
   const [order, setOrder] = useState({
-    name: '',
-    lastName: '',
+    name: auth.user.user.name,
+    lastName: auth.user.user.lastName,
     date: new Date(),
     products: [],
   });
