@@ -1,8 +1,12 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/router');
+const path = require('path');
 const middleware = require('./utils/middleware');
 const cors = require('cors');
+
+const buildPath = path.join(__dirname, 'client', 'build');
+
 
 const app = express();
 
@@ -11,6 +15,14 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api', router);
+
+if (process.env.NODE__ENV === 'production') {
+    app.use(express.static(path.join(buildPath, 'index.html')));
+
+    app.get('*', (req, res) => {
+        res.sendFile()
+    })
+}
 
 app.use(middleware.unknownEndpoint);
 
