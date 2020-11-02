@@ -8,6 +8,8 @@ router.get('/', async (req, res, next) => {
   try {
     const query = req.query;
     const orders = await orderService.getOrders(query, req.user);
+    const ordersCount = await orderService.getOrdersCount(req.user);
+    res.setHeader('X-Total-Count', ordersCount);
     res.json(orders);
   } catch (e) {
     next(e);
@@ -36,6 +38,17 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {});
+router.put('/:id', async (req, res, next) => {
+  try {
+    const order = req.body;
+    const id = req.params.id;
+    apiUtil.validateId(id);
+    apiUtil.validateJSON(order, orderService.orderJsonSchema);
+    const updatedOrder = await orderService.updateOrder(order, id);
+    res.sendStatus(204);
+  } catch (e) {
+    next(e);
+  }
+});
 
 module.exports = router;

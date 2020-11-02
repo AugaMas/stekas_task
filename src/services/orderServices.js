@@ -29,7 +29,7 @@ async function createOrder(order, user) {
 }
 
 async function updateOrder(newOrder, id) {
-  const order = await Order.findByIdAndUpdate(id, newOrder, { new: true });
+  const order = await Order.findOneAndUpdate({_id: id}, newOrder, { new: true });
   return order;
 }
 
@@ -39,16 +39,31 @@ async function deleteOrder(id) {
 
 async function getOrders(query, user) {
   const { size, page } = apiUtil.getPaging(query);
+  const filter = query.filter;
   const orders = await Order.find({ customer: user._id })
     .lean()
     .limit(size)
-    .skip(page * size);
+    .skip(page * size).sort(filter);
   return orders;
 }
 
 async function getOrderById(id) {
   const order = await Order.findById(id).lean();
-  return order;
+  return orderDTO(order);
+}
+
+async function getOrdersCount(user) {
+  const count = await Order.countDocuments({ customer: user._id });
+  return count;
+}
+
+function orderDTO(order) {
+  return {
+    date: order.date,
+    lastName: order.lastName,
+    name: order.name,
+    products: order.products
+  }
 }
 
 module.exports = {
@@ -58,4 +73,5 @@ module.exports = {
   deleteOrder,
   getOrderById,
   getOrders,
+  getOrdersCount
 };

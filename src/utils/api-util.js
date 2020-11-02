@@ -18,7 +18,7 @@ function validateJSON(object, schema) {
 
 function getPaging(query) {
   const size = Math.min(Math.max(query.size | 0 || 10, 1), 100);
-  const page = query.page | 0 || 0;
+  const page = query.page? (query.page | 0) - 1 : 0 ;
   return { size, page };
 }
 
