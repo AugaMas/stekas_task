@@ -19,10 +19,10 @@ export const register = (user) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE,
-        payload: response.data.message,
+        payload: 'Prisiregistruota',
       });
 
-      return Promise.resolve(response.data.message);
+      return Promise.resolve('Prisiregistruota');
     },
     (error) => {
       const message =
