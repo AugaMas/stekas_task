@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Navbar,
-  NavDropdown,
-  Nav,
-  Form,
-  FormControl,
-  Button,
-} from 'react-bootstrap';
+import { Navbar, Nav, Form, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import Modal from './Modal';
 import Login from './authentication/Login';
+import { Link } from 'react-router-dom';
 import { logout } from '../actions/authentication/action';
 import Register from './authentication/Register';
 
@@ -25,13 +19,17 @@ function NavigationBar() {
   return (
     <>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="/">Stekas Užduotis</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">
+          Stekas Užduotis
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           {auth.isLoggedIn && (
             <Nav>
-              <Nav.Link href="#deets">Mano užsakymai</Nav.Link>
-              <Nav.Link eventKey={2} href="#memes">
+              <Nav.Link as={Link} to="/orders">
+                Mano užsakymai
+              </Nav.Link>
+              <Nav.Link as={Link} to="/order/new">
                 Naujas užsakymas
               </Nav.Link>
             </Nav>

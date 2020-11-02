@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal as M, Button } from 'react-bootstrap';
+import { Modal as M } from 'react-bootstrap';
 
 function Modal(props) {
   return (

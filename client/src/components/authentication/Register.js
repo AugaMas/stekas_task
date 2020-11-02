@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../../actions/authentication/action';
-import { Form, Button, Spinner, Span } from 'react-bootstrap';
+import { Form, Button, Spinner } from 'react-bootstrap';
 
 function Register(props) {
   const [user, setUser] = useState({

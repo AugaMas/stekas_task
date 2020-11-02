@@ -7,8 +7,8 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
   try {
     const query = req.query;
-    await orderService.getOrders(query, req.user);
-    res.send('lala');
+    const orders = await orderService.getOrders(query, req.user);
+    res.json(orders);
   } catch (e) {
     next(e);
   }

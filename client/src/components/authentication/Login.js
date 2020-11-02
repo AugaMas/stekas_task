@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Button, Spinner, Span } from 'react-bootstrap';
+import { Form, Button, Spinner } from 'react-bootstrap';
 import { login } from '../../actions/authentication/action';
 
 function Login(props) {
