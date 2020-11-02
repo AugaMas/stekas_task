@@ -16,13 +16,13 @@ app.use(cookieParser());
 
 app.use('/api', router);
 
-// if (process.env.NODE__ENV === 'production') {
+if (process.env.NODE__ENV === 'production') {
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) => {
         res.sendFile(path.join(buildPath, 'index.html'))
     })
-// }
+}
 
 app.use(middleware.unknownEndpoint);
 
