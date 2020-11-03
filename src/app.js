@@ -5,8 +5,7 @@ const path = require('path');
 const middleware = require('./utils/middleware');
 const cors = require('cors');
 
-const buildPath = path.join(__dirname, 'client', 'build');
-
+const buildPath = path.join(__dirname.substring(0, __dirname.lastIndexOf('\\')), 'client', 'build');
 const app = express();
 
 app.use(cors());
@@ -16,7 +15,7 @@ app.use(cookieParser());
 app.use('/api', router);
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('client/build'));
+    app.use(express.static(buildPath));
 
     app.get('*', (req, res) => {
         res.sendFile(path.join(buildPath, 'index.html'))
