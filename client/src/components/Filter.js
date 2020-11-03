@@ -5,7 +5,7 @@ import { search } from '../helpers/search';
 
 function Filter() {
   const [filter, setFilter] = useState(search.useQuery().get('name') || '');
-  const debouncedSearchTerm = useDebounce(filter, 1000);
+  const debouncedSearchTerm = useDebounce(filter, 500);
   const history = useHistory();
   const { addQuery } = search.useQueryBuilder();
 
@@ -14,13 +14,17 @@ function Filter() {
   }, [debouncedSearchTerm]);
 
   return (
-    <Form>
+    <Form
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <Form.Group controlId="name">
         <Form.Label>Filtruoti pagal vardą</Form.Label>
         <Form.Control
           type="text"
           value={filter}
-          onChange={(e) => {e.preventDefault();
+          onChange={(e) => {
             setFilter(e.target.value);
           }}
         />

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/index.js",
-    "start": "node src/index.js",
+    "start": "cross-env NODE_ENV=production node src/index.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "Augustas Maslauskas",
@@ -23,6 +23,7 @@
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.1.4",
