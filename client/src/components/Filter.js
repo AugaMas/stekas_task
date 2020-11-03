@@ -1,40 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
-import { search } from '../helpers/search';
 import { useHistory } from 'react-router-dom';
+import { search } from '../helpers/search';
 
-function Filter(props) {
+function Filter() {
+  const [filter, setFilter] = useState(search.useQuery().get('name') || '');
+  const debouncedSearchTerm = useDebounce(filter, 1000);
   const history = useHistory();
-  const filter = search.useQuery().get('filter') || '';
   const { addQuery } = search.useQueryBuilder();
 
-  function handleChange(e) {
-    history.push(
-      history.location.pathname + '?' + addQuery('filter', e.target.value)
-    );
-  }
+  useEffect(() => {
+    history.push(history.location.pathname + '?' + addQuery('name', filter));
+  }, [debouncedSearchTerm]);
 
   return (
     <Form>
-      <Form.Group controlId="select">
-        <Form.Label>{props.name}</Form.Label>
+      <Form.Group controlId="name">
+        <Form.Label>Filtruoti pagal vardą</Form.Label>
         <Form.Control
-          as="select"
-          size="md"
+          type="text"
           value={filter}
           onChange={(e) => {
-            handleChange(e);
+            setFilter(e.target.value);
           }}
-        >
-          {props.options.map((o, index) => (
-            <option key={index} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </Form.Control>
+        />
       </Form.Group>
     </Form>
   );
+}
+
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
 }
 
 export default Filter;

@@ -29,7 +29,9 @@ async function createOrder(order, user) {
 }
 
 async function updateOrder(newOrder, id) {
-  const order = await Order.findOneAndUpdate({_id: id}, newOrder, { new: true });
+  const order = await Order.findOneAndUpdate({ _id: id }, newOrder, {
+    new: true,
+  });
   return order;
 }
 
@@ -40,10 +42,18 @@ async function deleteOrder(id) {
 async function getOrders(query, user) {
   const { size, page } = apiUtil.getPaging(query);
   const filter = query.filter;
-  const orders = await Order.find({ customer: user._id })
+  const name = query.name;
+
+  let orderQuery = { customer: user._id };
+  if (name) {
+    orderQuery.name = { $regex: name, $options: 'i' };
+  }
+
+  const orders = await Order.find(orderQuery)
     .lean()
     .limit(size)
-    .skip(page * size).sort(filter);
+    .skip(page * size)
+    .sort(filter);
   return orders;
 }
 
@@ -52,8 +62,13 @@ async function getOrderById(id) {
   return orderDTO(order);
 }
 
-async function getOrdersCount(user) {
-  const count = await Order.countDocuments({ customer: user._id });
+async function getOrdersCount(user, query) {
+  let orderQuery = { customer: user._id };
+  const name = query.name;
+  if (name) {
+    orderQuery.name = { $regex: name, $options: 'i' };
+  }
+  const count = await Order.countDocuments(orderQuery);
   return count;
 }
 
@@ -62,8 +77,8 @@ function orderDTO(order) {
     date: order.date,
     lastName: order.lastName,
     name: order.name,
-    products: order.products
-  }
+    products: order.products,
+  };
 }
 
 module.exports = {
@@ -73,5 +88,5 @@ module.exports = {
   deleteOrder,
   getOrderById,
   getOrders,
-  getOrdersCount
+  getOrdersCount,
 };

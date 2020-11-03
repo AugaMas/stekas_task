@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
   try {
     const query = req.query;
     const orders = await orderService.getOrders(query, req.user);
-    const ordersCount = await orderService.getOrdersCount(req.user);
+    const ordersCount = await orderService.getOrdersCount(req.user, query);
     res.setHeader('X-Total-Count', ordersCount);
     res.json(orders);
   } catch (e) {
