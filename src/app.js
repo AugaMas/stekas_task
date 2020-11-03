@@ -6,6 +6,7 @@ const middleware = require('./utils/middleware');
 const cors = require('cors');
 
 const buildPath = path.join(__dirname.substring(0, __dirname.lastIndexOf('\\')), 'client', 'build');
+console.log(buildPath)
 const app = express();
 
 app.use(cors());
