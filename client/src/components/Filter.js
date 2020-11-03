@@ -20,7 +20,7 @@ function Filter() {
         <Form.Control
           type="text"
           value={filter}
-          onChange={(e) => {
+          onChange={(e) => {e.preventDefault();
             setFilter(e.target.value);
           }}
         />
